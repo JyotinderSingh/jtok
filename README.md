@@ -8,6 +8,19 @@ I started working on this after reading Nystrom's book [Crafting Interpreters](h
 
 ## The Tok Language Spec
 
+The Tok grammar looks something like this, in order of associativity and precedence:
+```
+expression     → equality ;
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+unary          → ( "!" | "-" ) unary
+                 | primary ;
+primary        → NUMBER | STRING | "true" | "false" | "nil"
+                 | "(" expression ")" ;
+```
+
 Hello, Tok
 
 ```
