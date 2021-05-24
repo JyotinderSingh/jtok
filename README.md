@@ -4,11 +4,13 @@ A Java compiler for tok *(pronounced 'talk')*
 
 This repository is an effort to build a compiler for a programming language called **tok**.
 
-I started working on this after reading Nystrom's book [Crafting Interpreters](https://craftinginterpreters.com/).
+I started working on this after reading [Bob Nystrom's book, Crafting Interpreters](https://journal.stuffwithstuff.com/)
+.
 
 ## The Tok Language Spec
 
 The Tok grammar looks something like this, in order of associativity and precedence:
+
 ```
 expression     → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
