@@ -41,7 +41,12 @@ class AstPrinter implements Expr.Visitor<String> {
         return builder.toString();
     }
 
-//    public static void main(String[] args) {
+    @Override
+    public String visitVariableExpr(Expr.Variable expr) {
+        return parenthesize(expr.name.lexeme, expr);
+    }
+
+    //    public static void main(String[] args) {
 //        Expr expression = new Expr.Binary(
 //                new Expr.Unary(new Token(TokenType.MINUS, "-", null, 1),
 //                        new Expr.Literal(123)),
