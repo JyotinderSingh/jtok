@@ -102,6 +102,8 @@ public class Parser {
     }
 
     private Expr assignment() {
+        // assignment   ->    IDENTIFIER "=" assignment
+        //                    | equality ;
         Expr expr = equality();
 
         if (match(EQUAL)) {
