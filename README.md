@@ -1,8 +1,8 @@
 # jtok
 
-A Java compiler for tok *(pronounced 'talk')*
+This repository is an effort to build a compiler for a programming language called **Tok** *(pronounced 'talk')*.
 
-This repository is an effort to build a compiler for a programming language called **tok**.
+jtok *(pronounced 'jay-talk')* is a Java compiler for Tok.
 
 I started working on this after reading [Bob Nystrom's book, Crafting Interpreters](https://journal.stuffwithstuff.com/)
 .
