@@ -30,8 +30,11 @@ statement      → exprStmt
                  | forStmt
                  | ifStmt
                  | printStmt
+                 | returnStmt
                  | whileStmt
                  | block ;
+
+returnStmt     → "return" expression? ";" ;
 
 forStmt        → "for" "(" ( varDecl | exprStmt | ";" )
                  expression? ";"
@@ -75,6 +78,8 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
                  | "(" expression ")"
                  | IDENTIFIER ;
 ```
+
+---
 
 Hello, Tok
 
