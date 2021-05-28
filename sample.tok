@@ -11,4 +11,18 @@ for (var i = 0; i < 20; i = i + 1) {
 
 var end = clock();
 
+print "";
+print "Time to run fibonacci:";
 print end - start;
+print "";
+
+// closures example
+fun count(n) {
+  while (n < 100) {
+    if (n == 3) return n; // <--
+    print n;
+    n = n + 1;
+  }
+}
+
+count(1);
