@@ -1,8 +1,8 @@
 # jtok
 
-This repository is an effort to build a compiler for a programming language called **Tok** *(pronounced 'talk')*.
+This repository is an effort to build a interpreter for a programming language called **Tok** *(pronounced 'talk')*.
 
-jtok *(pronounced 'jay-talk')* is a Java compiler for Tok.
+jtok *(pronounced 'jay-talk')* is a Java interpreter for Tok.
 
 I started working on this after reading [Bob Nystrom's book, Crafting Interpreters](https://journal.stuffwithstuff.com/)
 .
@@ -14,8 +14,15 @@ The Tok grammar looks something like this, in order of associativity and precede
 ```
 program        → statement* EOF ;
 
-declaration    → varDecl
+declaration    → funDecl
+                 | varDecl
                  | statement ;
+                 
+funDecl        → "fun" function ;
+
+function       → IDENTIFIER "(" parameters? ")" block ;             
+
+parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
                  
 varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 
@@ -58,8 +65,11 @@ term           → factor ( ( "-" | "+" ) factor )* ;
 
 factor         → unary ( ( "/" | "*" ) unary )* ;
 
-unary          → ( "!" | "-" ) unary
-                 | primary ;
+unary          → ( "!" | "-" ) unary | call ;
+
+call           → primary ( "(" arguments? ")" )* ;
+
+arguments      → expression ( "," expression )* ;
 
 primary        → NUMBER | STRING | "true" | "false" | "nil"
                  | "(" expression ")"
