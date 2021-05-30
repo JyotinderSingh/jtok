@@ -94,9 +94,9 @@ Tok is dynamically typed. Variables can store values of any type, and a single v
 different types at different times. If you try to perform an operation on values of the wrong type—say, dividing a
 number by a string—then the error is detected and reported at runtime.
 
-### Automatic Memory Managment
+[comment]: <> (### Automatic Memory Managment)
 
-Tok includes its own Garbage Collector which makes use of **Tracing Garbage Collection**.
+[comment]: <> (Tok includes its own Garbage Collector which makes use of **Tracing Garbage Collection**.)
 
 ### Data Types
 
