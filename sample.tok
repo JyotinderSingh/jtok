@@ -27,6 +27,8 @@ fun count(n) {
 
 count(1);
 
+print "";
+
 // Classes
 class Bacon {
   eat() {
@@ -35,3 +37,22 @@ class Bacon {
 }
 
 Bacon().eat(); // Prints "Crunch crunch crunch!".
+
+print "";
+
+class Pet {
+
+    init(animal){
+        this.animal = animal;
+    }
+
+    printer(bop) {
+        print "The " + this.animal + "'s nose goes " + bop + "!";
+    }
+}
+
+var dog = Pet("dog");
+var dogFunc = dog.printer;
+
+dog.printer("bop");
+dogFunc("boop");
