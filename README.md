@@ -2,7 +2,7 @@
 
 This repository is an effort to build an interpreter for a programming language called **Tok** *(pronounced 'talk')*.
 
-jtok *(pronounced 'jay-talk')* is a Java interpreter for Tok.
+jtok *(pronounced 'jay-talk')* is a Tree-Walk Java interpreter for Tok.
 
 The implementation includes a **REPL** and a **CLI interpreter.**
 
