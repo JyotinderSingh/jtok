@@ -26,3 +26,12 @@ fun count(n) {
 }
 
 count(1);
+
+// Classes
+class Bacon {
+  eat() {
+    print "Crunch crunch crunch!";
+  }
+}
+
+Bacon().eat(); // Prints "Crunch crunch crunch!".

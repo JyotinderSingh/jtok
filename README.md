@@ -4,8 +4,7 @@ This repository is an effort to build a interpreter for a programming language c
 
 jtok *(pronounced 'jay-talk')* is a Java interpreter for Tok.
 
-I started working on this after reading [Bob Nystrom's book, Crafting Interpreters](https://journal.stuffwithstuff.com/)
-.
+I started working on this after reading [Bob Nystrom](https://journal.stuffwithstuff.com/) 's book, Crafting Interpreters.
 
 ## The Tok Language Spec
 
@@ -14,9 +13,12 @@ The Tok grammar looks something like this, in order of associativity and precede
 ```
 program        → statement* EOF ;
 
-declaration    → funDecl
+declaration    → classDecl
+                 | funDecl
                  | varDecl
                  | statement ;
+
+classDecl      → "class" IDENTIFIER "{" function* "}" ;             
                  
 funDecl        → "fun" function ;
 
@@ -53,7 +55,7 @@ printStmt      → "print" expression ";" ;
 
 expression     → assignment ;
 
-assignment     → IDENTIFIER "=" assignment
+assignment     → ( call "." )? IDENTIFIER "=" assignment
                  | logic_or ;
                
 logic_or       → logic_and ( "or" logic_and )* ;
@@ -70,7 +72,7 @@ factor         → unary ( ( "/" | "*" ) unary )* ;
 
 unary          → ( "!" | "-" ) unary | call ;
 
-call           → primary ( "(" arguments? ")" )* ;
+call           → primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
 
 arguments      → expression ( "," expression )* ;
 

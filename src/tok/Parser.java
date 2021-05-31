@@ -7,47 +7,49 @@ import java.util.List;
 import static tok.TokenType.*;
 
 public class Parser {
-    /*
+    /**
      * Our parser parses Tok using the following grammar:
      * program      ->    statement* EOF ;
-     * declaration  ->    funDecl
-     *                    | varDecl
-     *                    | statement ;
+     * declaration  ->    classDecl
+     * | funDecl
+     * | varDecl
+     * | statement ;
+     * classDecl    ->    "class" IDENTIFIER "{" function* "}" ;
      * funDecl      ->    "fun" function ;
      * function     ->    IDENTIFIER "(" parameters? ")" block ;
      * parameters   ->    IDENTIFIER ( "," IDENTIFIER )* ;
      * varDecl      ->    "var" IDENTIFIER ( "=" expression )? ";" ;
      * statement    ->    exprStmt
-     *                    | forStmt
-     *                    | ifStmt
-     *                    | printStmt
-     *                    | returnStmt
-     *                    | whileStmt
-     *                    | block ;
+     * | forStmt
+     * | ifStmt
+     * | printStmt
+     * | returnStmt
+     * | whileStmt
+     * | block ;
      * returnStmt   ->    | "return" expression? ";" ;
      * forStmt      ->    "for" "(" ( varDecl | exprStmt | ";" )
-     *                    expression? ";"
-     *                    expression? ")" statement ;
+     * expression? ";"
+     * expression? ")" statement ;
      * whileStmt    ->    "while" "(" expression ")" statement ;
      * ifStmt       ->    "if" "(" expression ")" statement
-     *                    ( "else" statement )? ;
+     * ( "else" statement )? ;
      * block        ->    "{" declaration* "}" ;
      * exprStmt     ->    expression ";" ;
      * printStmt    ->    "print" expression ";" ;
      * expression   ->    assignment ;
-     * assignment   ->    IDENTIFIER "=" assignment
-     *                    | equality ;
+     * assignment   ->    ( call "." )? DENTIFIER "=" assignment
+     * | equality ;
      * equality     ->    comparison ( ( "!=" | "==" ) comparison )* ;
      * comparison   ->    term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
      * term         ->    factor ( ( "-" | "+" ) factor )* ;
      * factor       ->    unary ( ( "/" | "*" ) unary )* ;
      * unary        ->    ( "!" | "-" ) unary
-     *                    | call ;
+     * | call ;
      * call         ->    primary ( "(" arguments? ")" )* ;
      * arguments    ->    expression ( "," expression )* ;
      * primary      ->    NUMBER | STRING | "true" | "false" | "nil"
-     *                    | "(" expression ")"
-     *                    | IDENTIFIER ;
+     * | "(" expression ")"
+     * | IDENTIFIER ;
      */
 
     private static class ParseError extends RuntimeException {
@@ -76,6 +78,7 @@ public class Parser {
 
     private Stmt declaration() {
         try {
+            if (match(CLASS)) return classDeclaration();
             if (match(FUN)) return function("function");
             if (match(VAR)) return varDeclaration();
 
@@ -85,6 +88,19 @@ public class Parser {
             synchronize();
             return null;
         }
+    }
+
+    private Stmt classDeclaration() {
+        Token name = consume(IDENTIFIER, "Expect class name.");
+        consume(LEFT_BRACE, "Expect '{' before class body.");
+
+        List<Stmt.Function> methods = new ArrayList<>();
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
+            methods.add(function("method"));
+        }
+        consume(RIGHT_BRACE, "Expect '}' after class body.");
+
+        return new Stmt.Class(name, methods);
     }
 
     private Stmt statement() {
@@ -245,6 +261,9 @@ public class Parser {
 
                 Token name = ((Expr.Variable) expr).name;
                 return new Expr.Assign(name, value);
+            } else if (expr instanceof Expr.Get) {
+                Expr.Get get = (Expr.Get) expr;
+                return new Expr.Set(get.object, get.name, value);
             }
 
             error(equals, "Invalid assignment target.");
@@ -376,6 +395,9 @@ public class Parser {
         while (true) {
             if (match(LEFT_PAREN)) {
                 expr = finishCall(expr);
+            } else if (match(DOT)) {
+                Token name = consume(IDENTIFIER, "Expect property name after '.'.");
+                expr = new Expr.Get(expr, name);
             } else {
                 break;
             }
@@ -395,6 +417,8 @@ public class Parser {
         if (match(NUMBER, STRING)) {
             return new Expr.Literal(previous().literal);
         }
+
+        if (match(THIS)) return new Expr.This(previous());
 
         if (match(IDENTIFIER)) {
             return new Expr.Variable(previous());

@@ -3,12 +3,26 @@ package tok;
 import java.util.List;
 
 public class TokFunction implements TokCallable {
+    /**
+     * TokFunction is the runtime representation of a Tok Function.
+     * The Stmt.Function AST node is converted into a Tok Function by the interpreter at runtime.
+     */
+
     private final Stmt.Function declaration;
     private final Environment closure;
 
-    TokFunction(Stmt.Function declaration, Environment closure) {
+    private final boolean isInitializer;
+
+    TokFunction(Stmt.Function declaration, Environment closure, boolean isInitializer) {
+        this.isInitializer = isInitializer;
         this.closure = closure;
         this.declaration = declaration;
+    }
+
+    TokFunction bind(TokInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new TokFunction(declaration, environment, isInitializer);
     }
 
     @Override
@@ -26,8 +40,11 @@ public class TokFunction implements TokCallable {
         try {
             interpreter.executeBlock(declaration.body, environment);
         } catch (Return returnValue) {
+            if (isInitializer) return closure.getAt(0, "this");
             return returnValue.value;
         }
+
+        if (isInitializer) return closure.getAt(0, "this");
         return null;
     }
 
