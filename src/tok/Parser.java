@@ -7,49 +7,50 @@ import java.util.List;
 import static tok.TokenType.*;
 
 public class Parser {
-    /**
+    /*
      * Our parser parses Tok using the following grammar:
      * program      ->    statement* EOF ;
      * declaration  ->    classDecl
-     * | funDecl
-     * | varDecl
-     * | statement ;
-     * classDecl    ->    "class" IDENTIFIER "{" function* "}" ;
+     *                    | funDecl
+     *                    | varDecl
+     *                    | statement ;
+     * classDecl    ->    "class" IDENTIFIER ( "<" IDENTIFIER )?
+     *                    "{" function* "}" ;
      * funDecl      ->    "fun" function ;
      * function     ->    IDENTIFIER "(" parameters? ")" block ;
      * parameters   ->    IDENTIFIER ( "," IDENTIFIER )* ;
      * varDecl      ->    "var" IDENTIFIER ( "=" expression )? ";" ;
      * statement    ->    exprStmt
-     * | forStmt
-     * | ifStmt
-     * | printStmt
-     * | returnStmt
-     * | whileStmt
-     * | block ;
+     *                    | forStmt
+     *                    | ifStmt
+     *                    | printStmt
+     *                    | returnStmt
+     *                    | whileStmt
+     *                    | block ;
      * returnStmt   ->    | "return" expression? ";" ;
      * forStmt      ->    "for" "(" ( varDecl | exprStmt | ";" )
-     * expression? ";"
-     * expression? ")" statement ;
+     *                    expression? ";"
+     *                    expression? ")" statement ;
      * whileStmt    ->    "while" "(" expression ")" statement ;
      * ifStmt       ->    "if" "(" expression ")" statement
-     * ( "else" statement )? ;
+     *                    ( "else" statement )? ;
      * block        ->    "{" declaration* "}" ;
      * exprStmt     ->    expression ";" ;
      * printStmt    ->    "print" expression ";" ;
      * expression   ->    assignment ;
      * assignment   ->    ( call "." )? DENTIFIER "=" assignment
-     * | equality ;
+     *                    | equality ;
      * equality     ->    comparison ( ( "!=" | "==" ) comparison )* ;
      * comparison   ->    term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
      * term         ->    factor ( ( "-" | "+" ) factor )* ;
      * factor       ->    unary ( ( "/" | "*" ) unary )* ;
      * unary        ->    ( "!" | "-" ) unary
-     * | call ;
+     *                    | call ;
      * call         ->    primary ( "(" arguments? ")" )* ;
      * arguments    ->    expression ( "," expression )* ;
-     * primary      ->    NUMBER | STRING | "true" | "false" | "nil"
-     * | "(" expression ")"
-     * | IDENTIFIER ;
+     * primary      ->    "true" | "false" | "nil" | "this"
+     *                    | NUMBER | STRING | IDENTIFIER | "(" expression ")"
+     *                    | "super" "." IDENTIFIER ;
      */
 
     private static class ParseError extends RuntimeException {
@@ -92,6 +93,13 @@ public class Parser {
 
     private Stmt classDeclaration() {
         Token name = consume(IDENTIFIER, "Expect class name.");
+
+        Expr.Variable superclass = null;
+        if (match(LESS)) {
+            consume(IDENTIFIER, "Expect superclass name");
+            superclass = new Expr.Variable(previous());
+        }
+
         consume(LEFT_BRACE, "Expect '{' before class body.");
 
         List<Stmt.Function> methods = new ArrayList<>();
@@ -100,7 +108,7 @@ public class Parser {
         }
         consume(RIGHT_BRACE, "Expect '}' after class body.");
 
-        return new Stmt.Class(name, methods);
+        return new Stmt.Class(name, superclass, methods);
     }
 
     private Stmt statement() {
@@ -416,6 +424,13 @@ public class Parser {
 
         if (match(NUMBER, STRING)) {
             return new Expr.Literal(previous().literal);
+        }
+
+        if (match(SUPER)) {
+            Token keyword = previous();
+            consume(DOT, "Expect '.' after 'super'.");
+            Token method = consume(IDENTIFIER, "Expect superclass method name.");
+            return new Expr.Super(keyword, method);
         }
 
         if (match(THIS)) return new Expr.This(previous());

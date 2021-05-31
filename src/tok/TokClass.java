@@ -10,16 +10,22 @@ public class TokClass implements TokCallable {
      */
 
     final String name;
+    final TokClass superclass;
     private final Map<String, TokFunction> methods;
 
-    TokClass(String name, Map<String, TokFunction> methods) {
+    TokClass(String name, TokClass superclass, Map<String, TokFunction> methods) {
         this.name = name;
+        this.superclass = superclass;
         this.methods = methods;
     }
 
     TokFunction findMethod(String name) {
         if (methods.containsKey(name)) {
             return methods.get(name);
+        }
+
+        if (superclass != null) {
+            return superclass.findMethod(name);
         }
 
         return null;
