@@ -15,7 +15,7 @@ public class tok {
 
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
-            System.out.println("Usage: jtok [script]");
+            System.out.println("Usage: tok [script]");
             System.exit(64);
         } else if (args.length == 1) {
             runFile(args[0]);

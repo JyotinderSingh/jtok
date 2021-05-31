@@ -1,10 +1,13 @@
 # jtok
 
-This repository is an effort to build a interpreter for a programming language called **Tok** *(pronounced 'talk')*.
+This repository is an effort to build an interpreter for a programming language called **Tok** *(pronounced 'talk')*.
 
 jtok *(pronounced 'jay-talk')* is a Java interpreter for Tok.
 
-I started working on this after reading [Bob Nystrom](https://journal.stuffwithstuff.com/) 's book, Crafting Interpreters.
+The implementation includes a **REPL** and a **CLI interpreter.**
+
+I started working on this after reading [Bob Nystrom](https://journal.stuffwithstuff.com/) 's book, Crafting
+Interpreters.
 
 ## The Tok Language Spec
 
