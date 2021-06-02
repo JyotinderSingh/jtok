@@ -126,12 +126,12 @@ true or false;  // true.
 
 ```and``` and ```or``` are like flow structures because they short-circuit operators. Not only does ```and``` return the
 left operand if it is
-```false```, it doesn’t even evaluate the right one in that case. Conversely, if the left operand of an or is ```true```
+```false```, it does not even evaluate the right one in that case. Conversely, if the left operand of an or is ```true```
 , the right is skipped.
 
 ### Precedence and Grouping
 
-The operators follow the same precedence and grouping as C. You can use paranthesis if you want to group stuff and not
+The operators follow the same precedence and grouping as C. You can use parenthesis if you want to group stuff and not
 rely on precedence.
 
 ### Statements
@@ -389,7 +389,7 @@ class Brunch < Breakfast {
 
 ### The standard Library
 
-Well, the standard library isn't realy big enough to be called a book, let alone a library.
+Well, the standard library isn't really big enough to be called a book, let alone a library.
 
 But it does define a built-in ```print``` statement, and a ```clock()``` method that returns the number of seconds since
 the program started.

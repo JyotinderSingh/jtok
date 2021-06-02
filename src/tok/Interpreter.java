@@ -1,7 +1,5 @@
 package tok;
 
-import com.sun.tools.doclint.Env;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
