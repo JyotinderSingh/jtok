@@ -11,6 +11,22 @@ Interpreters.
 
 Head over to the [Documentation](/DOCUMENTATION.md) to see code examples and other language features!
 
+```
+                   jtok architecture
+                
+            ------------
+           |   Parser   |       <- Front End
+            ------------
+                  v
+            ------------
+           |     AST    |       <- Representation
+            ------------
+                  v
+            ------------
+           | Interpreter|       <- Execution
+            ------------
+```
+
 ## The Tok Language Spec
 
 The Tok grammar looks something like this, in order of associativity and precedence:
